@@ -18,20 +18,20 @@ class MongoWrapper(object):
 
     Overview:
 
-    This is a python based interface layer for storing and retreiving documents
+    This is a python based interface layer for storing and retrieving documents
     from a pymongo database. The major modules uses are pymongo, gridfs, 
     pickle, numpy.
 
     Each mongo database can contain multiple 'collections', each of which in 
-    turn holds docuemnts.  Documents can be of any structure.  In python, we 
+    turn holds documents.  Documents can be of any structure.  In python, we
     can simply use dictionaries containing many different types of objects as
     our documents.
 
     However, there are some small restrictions to work around for using mongodb
     to store typical scientific data structures (typically numpy arrays).  The
     first is that every document inserted into a mongodb must be less than 
-    16mb in size.  This is an abritrary, but hard limit. The second 
-    limitiation is that numpy arrays (and indeed, all custom objects) must 
+    16mb in size.  This is an arbitrary, but hard limit. The second
+    limitation is that numpy arrays (and indeed, all custom objects) must
     be first encoded into a basic python type (typically a string) to be 
     inserted in the database.  One way to handle encoding is to 
     subclass SONManipulator
@@ -55,9 +55,9 @@ class MongoWrapper(object):
     documents you retrieve will not contain any numpy arrays they
     originally stored- instead, those keys will point to the objectIDs 
     corresponding to the appropriate gridfs files. These numpy arrays can 
-    be loaded with the 'loadFullData' fuction, by passing in 'full=True' 
+    be loaded with the 'loadFullData' function, by passing in 'full=True'
     into loadExperiment(), or by using loadFullExperiment() instead.  In 
-    esscence, this means that the metadata for experiments is the primary 
+    essence, this means that the metadata for experiments is the primary
     document in the collection, with the option of loading the full data 
     for analysis quite easily.
     
@@ -78,12 +78,12 @@ class MongoWrapper(object):
     db = mdb.MongoWrapper('test','test_collection') 
     objectID = db.save(dictionary)
 
-    # some varient here.  use the meta data to filter.
+    # some variant here.  use the meta data to filter.
     experiments = db.load({'odor1name':'tmt'}) 
     
     Conventions:
     
-    Each person/project will utilize a seperate database.  Within this db, each
+    Each person/project will utilize a separate database.  Within this db, each
     collection will store a specific general type of experimental data.  While
     the schema-free nature of mongodb makes this unnecessary, it is useful for
     organization purposes. The 'fs' collection is reserved for the gridfs 
@@ -98,7 +98,7 @@ class MongoWrapper(object):
     will update/overwrite any document with such an id.
     
     Note that if you load a document and all it's data, alter the data, and
-    re-insert the document, the orignal data will be deleted from the gridFS,
+    re-insert the document, the original data will be deleted from the gridFS,
     as, by convention, it has nothing pointing to it.  This is to prevent 
     'leaks' through rounds of processing on data.  Care should be taken to 
     duplicate data when needed.
@@ -142,7 +142,7 @@ class MongoWrapper(object):
         :returns: List of ObjectIds of the inserted object(s).
         """
 
-        # simplfy things below by making even a single document a list
+        # simplify things below by making even a single document a list
         if not isinstance(document, list):
             document = [document]
 
@@ -183,7 +183,7 @@ class MongoWrapper(object):
         return id_values
 
     def loadFromIds(self, Ids):
-        """Conveience function to load from a list of ObjectIds or from their string
+        """Convenience function to load from a list of ObjectIds or from their string
         representations.  Takes a singleton or a list of either type.
 
         :param Ids: can be an ObjectId, string representation of an ObjectId, or a list containing items of either type.
@@ -317,7 +317,7 @@ class MongoWrapper(object):
                     #                    print 'checking if %s is already in the db.. ' % obj
                     if dataMD5 == self.fs.get(obj).md5:
                         match = True
-                        #  print 'yes, replacing np array w/old ojbectid: %s' % obj
+                        #  print 'yes, replacing np array w/old objectid: %s' % obj
                         document[key] = obj
                         self.temp_oldNpObjectIDs.remove(obj)
                         self.temp_newNpObjectIds.append(obj)
